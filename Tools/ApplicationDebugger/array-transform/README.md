@@ -6,12 +6,9 @@ through this sample *after* you familiarize yourself with the basics of
 SYCL programming, and *before* you start using the debugger.
 
 
-| Optimized for       | Description
+| Area                | Description
 |---------------------|--------------
-| OS                  | Linux* Ubuntu* 18.04 to 20.04 <br> CentOS* 8 <br> Fedora* 30 <br> SLES 15 <br> Windows* 10
-| Hardware            | Kaby Lake with GEN9 (on GPU) or newer (on CPU)
-| Software            | Intel&reg; oneAPI DPC++/C++ Compiler
-| What you will learn | Essential debugger features for effective debugging on CPU, GPU, and FPGA emulator
+| What you will learn | Essential debugger features for effective debugging on CPU, GPU (Linux only), and FPGA emulator
 | Time to complete    | 20 minutes for CPU or FPGA emulator; 30 minutes for GPU
 
 This sample accompanies 
@@ -35,7 +32,16 @@ about how to run the program and example outputs are given further
 below.  For complete setup and usage instructions, see [Get Started with Intel® Distribution for GDB* on Linux* OS Host](https://software.intel.com/en-us/get-started-with-debugging-dpcpp)
 of the application debugger.
 
+## Prerequisites
 
+| Optimized for       | Description
+|---------------------|--------------
+| OS                  | Linux* Ubuntu* 20.04 <br> CentOS* 8 <br> Fedora* 30 <br> SLES 15 <br> Windows* 10
+| Hardware            | discrete GPU (Linux* OS only): Intel® Arc(tm), Intel® Data Center GPU Flex Series
+| Software            | Intel&reg; oneAPI DPC++/C++ Compiler
+
+> **Note** Debugger from 2023.0 release does not support debugging kernels offloaded to GPU devices.
+ 
 ## Key Implementation Details
 
 The basic SYCL implementation explained in the code includes device
@@ -88,7 +94,6 @@ your OS:
 The include folder is located at
 `%ONEAPI_ROOT%\dev-utilities\latest\include` on your development
 system.
-
 
 ### Running Samples In DevCloud
 
@@ -170,16 +175,10 @@ compiler.
 
 > *Hint:* Run `ocloc compile --help` to see available GPU device options.
 
-For example, to do AoT compilation for a `kbl` GPU device:
+For example, to do AoT compilation for a `DG1` GPU device:
 
 ```
-$ cmake .. -DDPCPP_COMPILE_TARGET=kbl
-```
-
-or for the Gen12 family:
-
-```
-$ cmake .. -DDPCPP_COMPILE_TARGET=gen12LP
+$ cmake .. -DDPCPP_COMPILE_TARGET=dg1
 ```
 
 > **Note**: AoT compilation is particularly helpful in larger
@@ -198,7 +197,7 @@ Intel® oneAPI Toolkits, which provides system checks to find missing
 dependencies and permissions errors.
 [Learn more](https://www.intel.com/content/www/us/en/develop/documentation/diagnostic-utility-user-guide/top.html).
 
-### On a Windows* System Using Visual Studio* Version 2017 or Newer
+### On a Windows* System Using Visual Studio* Version 2019 or Newer
 
 #### Command line using MSBuild
 
@@ -207,8 +206,8 @@ dependencies and permissions errors.
 
 #### Visual Studio IDE
 
-1. Right-click on the solution files and open via either Visual Studio 2017
-   or in 2019.
+1. Right-click on the solution files and open via either Visual Studio 2019
+   or in 2022.
 
 2. Select Menu "Build > Build Solution" to build the selected configuration.
 
@@ -348,6 +347,9 @@ at array-transform.cpp:56
   the program counter.  `x /8wd &count` shows eight words in decimal
   format located at the address of `count`.
 
+`info devices`
+: List available GPU devices.
+
 `set nonstop on/off`
 : Enable/disable the nonstop mode.  This command may **not** be used
   after the program has started.
@@ -359,6 +361,14 @@ at array-transform.cpp:56
 : Save the JIT'ed objfile that contains address `addr` into the file
   `filename`.  Useful for extracting the kernel when running on
   the CPU device.
+
+`info sharedlibrary`
+: List the loaded shared libraries.  While debugging the kernel offloaded
+  to GPU, use this command to find out the memory range of the kernel binary.
+
+`dump memory <filename> <start_addr> <end_addr>
+: Dump the memory range from `start_addr` to `end_addr` into the file
+ `filename`.
 
 `cond [-force] <N> <exp>`
 : Define the expression `exp` as the condition for breakpoint `N`.
