@@ -28,8 +28,8 @@ if (NOT GDBSERVER)
   message (FATAL_ERROR "'gdbserver-ze' not found!")
 endif ()
 
-set (PROJECT_NAME_BUGGED "${PROJECT_NAME}-bugged")
-set (PROJECT_NAME_FIXED "${PROJECT_NAME}-fixed")
+set (PROJECT_NAME_BUGGED "bugged")
+set (PROJECT_NAME_FIXED "fixed")
 
 add_executable (${PROJECT_NAME_BUGGED} src/jacobi.cpp)
 add_executable (${PROJECT_NAME_FIXED} src/jacobi.cpp)

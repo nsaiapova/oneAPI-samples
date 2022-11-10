@@ -231,6 +231,7 @@ Please see the setup instructions in the Get Started Guide
     ```
     $ ./jacobi-bugged cpu
     ```
+
     If no device is specified both programs `jacobi-bugged` and `jacobi-fixed` return an error:
 
     ```
@@ -317,7 +318,7 @@ $8 = sycl::_V1::id<1> = {63}
 #### `thread apply`
 
 You can apply a command to specified threads and SIMD lanes with `thread apply`.
-The following command prints `gid` for each active SIMD lane of the current thread:
+The following command prints `index` for each active SIMD lane of the current thread:
 
 ```
 (gdb) thread apply :* -q print index
