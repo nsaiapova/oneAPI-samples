@@ -1,3 +1,4 @@
+TEST TEST **TEST**
 # `array-transform` Sample
 
 This is a small SYCL*-compliant code sample for exercising application debugging using
